@@ -8,10 +8,10 @@ const supabase = createClient(
 );
 
 const CORS_HEADERS = {
-	"Access-Control-Allow-Methods": "GET , DELETE, POST, OPTIONS",
+	"Access-Control-Allow-Methods": "GET,DELETE,PUT,POST,OPTIONS",
 	"Access-Control-Allow-Origin": "*",
 	"Access-Control-Allow-Headers":
-		"Origin, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization",
+		"Origin,XMLHttpRequest , Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization",
 	"Access-Control-Max-Age": "2592000",
 	"Access-Control-Allow-Credentials": "true",
 	"Content-Type": "application/json",
@@ -19,10 +19,18 @@ const CORS_HEADERS = {
 };
 
 const handler = async function (event, context) {
+	if (event.httpMethod === "OPTIONS") {
+		return {
+			statusCode: 200,
+			headers: { ...CORS_HEADERS },
+			body: JSON.stringify({ message: "Successful preflight call." }),
+		};
+	}
+
 	if (event.httpMethod !== "DELETE")
 		return {
 			statusCode: 405,
-			body: "Must POST to this function",
+			body: JSON.stringify({ message: "Must POST to this function" }),
 			headers: CORS_HEADERS,
 		};
 

@@ -19,11 +19,18 @@ const CORS_HEADERS = {
 };
 
 const handler = async function (event, context) {
+	if (event.httpMethod === "OPTIONS") {
+		return {
+			statusCode: 200,
+			headers: { ...CORS_HEADERS },
+			body: JSON.stringify({ message: "Successful preflight call." }),
+		};
+	}
 
 	if (event.httpMethod !== "GET")
 		return {
 			statusCode: 405,
-			body: "Must GET to this function",
+			body: JSON.stringify({ message: "Must GET to this function"}),
 			headers: CORS_HEADERS,
 		};
 

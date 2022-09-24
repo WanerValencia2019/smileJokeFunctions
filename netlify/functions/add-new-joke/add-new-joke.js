@@ -8,10 +8,10 @@ const supabase = createClient(
 );
 
 const CORS_HEADERS = {
-	"Access-Control-Allow-Methods": "GET , DELETE, POST, OPTIONS",
+	"Access-Control-Allow-Methods": "GET,DELETE,POST,OPTIONS",
 	"Access-Control-Allow-Origin": "*",
 	"Access-Control-Allow-Headers":
-		"Origin, Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization",
+		"Origin,XMLHttpRequest , Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization",
 	"Access-Control-Max-Age": "2592000",
 	"Access-Control-Allow-Credentials": "true",
 	"Content-Type": "application/json",
@@ -19,11 +19,19 @@ const CORS_HEADERS = {
 };
 
 const handler = async function (event, context) {
+	if (event.httpMethod === "OPTIONS") {
+		return {
+		  statusCode: 200,
+		  headers: {...CORS_HEADERS},
+		  body: JSON.stringify({ message: "Successful preflight call." }),
+		};
+	  }
+
 	if (event.httpMethod !== "POST")
 		return {
 			statusCode: 405,
-			body: "Must POST to this function",
-			headers: CORS_HEADERS,
+			body: JSON.stringify({ message: "Must POST to this function"}),
+			headers: {...CORS_HEADERS},
 		};
 
 	const token = event.queryStringParameters["token"];
@@ -32,7 +40,7 @@ const handler = async function (event, context) {
 		return {
 			statusCode: 401,
 			body: JSON.stringify({ message: "Token is required" }),
-			headers: CORS_HEADERS,
+			headers:{...CORS_HEADERS},
 		};
 	}
 
@@ -41,7 +49,7 @@ const handler = async function (event, context) {
 
 		if (error) {
 			return {
-				headers: CORS_HEADERS,
+				headers: {...CORS_HEADERS},
 				statusCode: error.status,
 				body: JSON.stringify({
 					message: "Invalid token, signOut and retry later",
@@ -53,7 +61,7 @@ const handler = async function (event, context) {
 
 		if(!value || !icon_url) {
 			return {
-				headers: CORS_HEADERS,
+				headers: {...CORS_HEADERS},
 				statusCode: 422,
 				body: JSON.stringify({
 					message: "value and iconUrl are required",
@@ -68,7 +76,7 @@ const handler = async function (event, context) {
 
         if(db_error) {
             return {
-				headers: CORS_HEADERS,
+				headers: {...CORS_HEADERS},
 				statusCode: 400,
 				body: JSON.stringify({
 					message: db_error.message,
@@ -78,8 +86,8 @@ const handler = async function (event, context) {
 
 		return {
 			statusCode: 200,
-			headers: CORS_HEADERS,
-			body: JSON.stringify(data),
+			headers: {...CORS_HEADERS},
+			body: JSON.stringify(data[0]),
 		};
 	} catch (error) {
 		return {
