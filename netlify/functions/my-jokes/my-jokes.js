@@ -34,7 +34,7 @@ const handler = async function (event, context) {
 			headers: CORS_HEADERS,
 		};
 
-	const token = event.queryStringParameters["token"];
+	const token = event.headers["authorization"];
 
 	if (!token) {
 		return {

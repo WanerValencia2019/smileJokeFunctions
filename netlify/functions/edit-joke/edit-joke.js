@@ -35,7 +35,7 @@ const handler = async function (event, context) {
 		};
 
 	const jokeId = event.queryStringParameters["id"];
-	const token = event.queryStringParameters["token"];
+	const token = event.headers["authorization"];
 
 	if (!jokeId) {
 		return {
