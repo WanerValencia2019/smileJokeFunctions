@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const { createClient } = require("@supabase/supabase-js");
 
 // Create a single supabase client for interacting with your database
@@ -8,7 +7,7 @@ const supabase = createClient(
 );
 
 const CORS_HEADERS = {
-	"Access-Control-Allow-Methods": "GET,DELETE,PUT,POST,OPTIONS",
+	"Access-Control-Allow-Methods": "PUT,OPTIONS",
 	"Access-Control-Allow-Origin": "*",
 	"Access-Control-Allow-Headers":
 		"Origin,XMLHttpRequest , Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization",

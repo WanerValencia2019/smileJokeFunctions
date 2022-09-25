@@ -8,7 +8,7 @@ const supabase = createClient(
 );
 
 const CORS_HEADERS = {
-	"Access-Control-Allow-Methods": "GET,DELETE,POST,OPTIONS",
+	"Access-Control-Allow-Methods": "POST,OPTIONS",
 	"Access-Control-Allow-Origin": "*",
 	"Access-Control-Allow-Headers":
 		"Origin,XMLHttpRequest , Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization",
